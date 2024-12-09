@@ -12,10 +12,7 @@
       "dest": "/",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
       "headers": {
-        "Access-Control-Allow-Origin": [
-          "http://localhost:5173",
-          "https://blogging-app-frontend-chi.vercel.app"
-        ]
+        "Access-Control-Allow-Origin": "https://blogging-app-frontend-chi.vercel.app"
       }
     }
   ]
