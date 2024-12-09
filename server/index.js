@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://blogging-app-frontend-chi.vercel.app/",
+      "https://blogging-app-frontend-chi.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
