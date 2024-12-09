@@ -2,19 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.js",
+      "src": "./index.js",
       "use": "@vercel/node"
     }
   ],
   "headers": [
     {
       "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://blogging-app-frontend-chi.vercel.app"
-        }
-      ]
+      "dest": "/index.js"
     }
   ]
 }
