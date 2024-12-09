@@ -2,7 +2,8 @@ import express from "express";
 import router from "./routers/api.js";
 import session from "express-session";
 import mongoose from "mongoose";
-mongoose.connect("mongodb://127.0.0.1:27017/blog-app");
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = 3000;
 const app = express();
@@ -26,5 +27,6 @@ app.use(express.json());
 app.use("/api", router);
 
 app.listen(PORT, () => {
+  mongoose.connect(process.env.MONGO_URI);
   console.log(`running at http://localhost/${PORT}`);
 });

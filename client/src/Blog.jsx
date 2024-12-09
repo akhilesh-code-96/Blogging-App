@@ -97,7 +97,7 @@ export default function Blog() {
 
   return (
     <>
-      {posts.length === 0 ? (
+      {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
         <div className="bg-gray-50 py-16 sm:py-24">
