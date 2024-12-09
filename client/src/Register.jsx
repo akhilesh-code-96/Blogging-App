@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import Redirect from "./components/Redirect.jsx";
 import ImageUpload from "./components/ImageUpload.jsx";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -29,7 +30,7 @@ export default function Register() {
       formData.append(key, user[key]);
     });
 
-    axios.post("/api/register", formData, {
+    axios.post(`${BASE_URL}/api/register`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 

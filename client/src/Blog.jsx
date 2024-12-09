@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import NewPost from "./components/NewPost.jsx";
 import CommentsParent from "./components/Comments.jsx";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
@@ -28,7 +29,7 @@ export default function Blog() {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("/api/posts");
+      const response = await axios.get(`${BASE_URL}/api/posts`);
       setPosts(response.data.allPosts);
       setLoading(false);
     } catch (error) {
@@ -40,7 +41,7 @@ export default function Blog() {
     try {
       const updatedLikes = currentLikes + 1;
       await axios.post(
-        "/api/update-likes",
+        `${BASE_URL}/api/update-likes`,
         { postId, userId },
         {
           headers: { "Content-Type": "application/json" },
@@ -59,7 +60,7 @@ export default function Blog() {
 
   const handleNewPost = async (formData) => {
     try {
-      await axios.post("/api/new-blog", formData, {
+      await axios.post(`${BASE_URL}/api/new-blog`, formData, {
         headers: { "Content-Type": "application/json" },
       });
       setLoading(true);
@@ -77,7 +78,11 @@ export default function Blog() {
 
   const saveComment = async (postId) => {
     try {
-      await axios.post("/api/post-comment", { postId, userId, commentInput });
+      await axios.post(`${BASE_URL}/api/post-comment`, {
+        postId,
+        userId,
+        commentInput,
+      });
       handleCommentToggle(postId);
       setCommentInput("");
     } catch (error) {
@@ -87,7 +92,7 @@ export default function Blog() {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get("/api/get-comment/");
+      const response = await axios.get(`${BASE_URL}/api/get-comment/`);
       fetchPosts();
       setFetchedComments(response.data.getComments);
     } catch (error) {

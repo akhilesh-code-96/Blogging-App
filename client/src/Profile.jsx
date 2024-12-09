@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UpdatePost from "./components/Update.jsx";
 import DeletePost from "./components/Delete.jsx";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Profile = () => {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -13,7 +14,7 @@ const Profile = () => {
   const getAccountPosts = async () => {
     try {
       const response = await axios.post(
-        "/api/account-posts",
+        `${BASE_URL}/api/account-posts`,
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -27,7 +28,7 @@ const Profile = () => {
 
     try {
       const response = await axios.post(
-        "/api/user",
+        `${BASE_URL}/api/user`,
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -52,7 +53,7 @@ const Profile = () => {
   const handleAboutSave = async () => {
     try {
       const response = await axios.post(
-        "/api/update-about",
+        `${BASE_URL}/api/update-about`,
         { email, about: aboutText },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -110,7 +111,9 @@ const Profile = () => {
           <div className="mt-6">
             <h2 className="text-2xl font-semibold mb-4">About</h2>
             {user.map((u, i) => (
-            <p key={i} className="text-gray-700">{u.about}</p>
+              <p key={i} className="text-gray-700">
+                {u.about}
+              </p>
             ))}
             <div className="flex justify-end mt-2">
               <button

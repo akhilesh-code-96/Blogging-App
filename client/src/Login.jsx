@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,9 +14,13 @@ export default function Login() {
     e.preventDefault();
     const loginData = { ...input };
     try {
-      const response = await axios.post("/api/post-login", loginData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        `${BASE_URL}/api/post-login`,
+        loginData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (response.data.user) {
         window.localStorage.setItem("token", response.data.sessionId);
         window.localStorage.setItem("email", response.data.email);
