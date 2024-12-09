@@ -9,9 +9,14 @@ const router = express.Router();
 const postController = new PostController();
 const userController = new UserController();
 
+router.get("/", (req, res) => res.send("Hello World!"));
 router.post("/account-posts", postController.accountPost);
 router.get("/posts", postController.getPost);
-router.post("/register", uploadFile.single("photo"), userController.registerUser);
+router.post(
+  "/register",
+  uploadFile.single("photo"),
+  userController.registerUser
+);
 router.post("/post-login", userController.login);
 router.post("/user", userController.getUser);
 router.post("/get-users-info", userController.userInfo);
