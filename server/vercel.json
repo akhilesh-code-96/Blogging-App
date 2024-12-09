@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/routers/api.js",
+      "dest": "routers/api.js",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
       "headers": {
         "Access-Control-Allow-Origin": "https://blogging-app-frontend-chi.vercel.app"
