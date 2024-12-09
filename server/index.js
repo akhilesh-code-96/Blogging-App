@@ -3,10 +3,22 @@ import router from "./routers/api.js";
 import session from "express-session";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 
 const PORT = 3000;
 const app = express();
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://blogging-app-frontend-chi.vercel.app/",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
 
 // application-level middleware.
 app.use(express.static("public"));
