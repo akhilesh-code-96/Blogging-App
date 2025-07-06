@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,17 +25,17 @@ export default function Header() {
 
   async function handleLogout() {
     window.localStorage.clear();
-    await axios.get("/api/logout");
+    await axios.get(BASE_URL + "/api/logout");
     setIsAuthenticated(isAuthenticated);
     navigate("/login");
   }
 
   return (
     <header className="bg-white dark:bg-gray-800 relative w-full z-50">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+      <nav className="mx-auto flex items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 -mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 dark:text-white hover:bg-gray-400/10">
-            The Blogging App
+            The Threads
           </Link>
         </div>
         <div className="flex lg:hidden">

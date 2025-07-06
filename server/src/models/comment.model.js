@@ -1,34 +1,17 @@
 import mongoose from "mongoose";
 
-const subCommentSchema = mongoose.Schema(
-  {
-    comment: { type: String },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    subComments: [
-      {
-        comment: { type: String },
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        subComments: { type: Array },
-      },
-    ],
-  },
-  { timestamps: true }
-);
-
 const commentSchema = mongoose.Schema(
   {
     comment: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    firstname: {type: String},
+    lastname: {type: String},
+    imageUrl: {type: String},
     postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
-    subComments: [subCommentSchema],
+    referenceId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
   },
   { timestamps: true }
 );
 
 const Comment = mongoose.model("Comment", commentSchema);
-const SubComment = mongoose.model("SubComment", subCommentSchema);
-export { Comment, SubComment };
+export { Comment };

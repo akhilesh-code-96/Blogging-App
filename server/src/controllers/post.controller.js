@@ -1,15 +1,16 @@
 import PostModel from "../models/post.model.js";
 import UserModel from "../models/user.model.js";
 import {
-  Comment as CommentModel,
-  SubComment as SubCommentModel,
+  Comment as CommentModel
 } from "../models/comment.model.js";
-import updateNestedComments from "../utils/nestedComments.js";
+import CommentsService from "../service/comments.service.js";
+
+const commentService = new CommentsService();
 
 export default class PostController {
   async getPost(req, res) {
     try {
-      const post = await PostModel.find();
+      const post = await PostModel.find().sort({createdAt: -1});
       res.status(200).json({ allPosts: post });
     } catch (error) {
       res
@@ -105,58 +106,70 @@ export default class PostController {
   }
 
   async updateComments(req, res) {
-    const { postId, userId, commentInput } = req.body;
+    const { commentId, postId, userId, commentInput } = req.body;
+
+    const comment = await CommentModel.findById(commentId);
+
     try {
-      const record = new CommentModel({
-        comment: commentInput,
-        userId: userId,
-        postId: postId,
-      });
-      record.save();
-      res.status(200).json({ message: "Comment updated successfully" });
+      const userInfo = await UserModel.findById(userId);
+
+      if (userInfo) {
+        const record = new CommentModel({
+          comment: commentInput,
+          userId: userId,
+          firstname: userInfo.firstname,
+          lastname: userInfo.lastname,
+          imageUrl: userInfo.imageUrl,
+          postId: postId,
+          referenceId: comment ? comment._id : null,
+        });
+        record.save();
+        res.status(200).json({ message: "Comment updated successfully" });
+      } else {
+        throw new Error("Can't find the user with this userId: " + userId);
+      }
     } catch (error) {
       res.status(501).json({ message: "Failed to update the comment" });
       console.error(error);
     }
-    // console.log(req.body);
+  }
+
+  async updateReplies(req, res) {
+    const { commentId, postId, userId, fetchReply } = req.body;
+
+    try {
+      const userInfo = await UserModel.findById(userId);
+
+      if (userInfo) {
+        const record = new CommentModel({
+          comment: fetchReply,
+          userId: userId,
+          firstname: userInfo.firstname,
+          lastname: userInfo.lastname,
+          imageUrl: userInfo.imageUrl,
+          postId: postId,
+          referenceId: commentId
+        });
+        record.save();
+        res.status(200).json({ record });
+      } else {
+        throw new Error("Can't find the user with this userId: " + userId);
+      }
+    } catch (error) {
+      console.error("Failed to update comment:", error);
+      res.status(500).json({ message: "Failed to update comment", error });
+    }
   }
 
   async getComments(req, res) {
     try {
-      const getComments = await CommentModel.find();
-      res.status(200).json({ getComments });
+      const getComments = await CommentModel.find().lean();
+
+      const modifiedComments = commentService.modifyComment(getComments);
+
+      res.status(200).json({ modifiedComments });
     } catch (error) {
       res.status(404).json({ message: "Failed to fetch the comments" });
-    }
-  }
-
-  async updateReplies(req, res) {
-    const { commentId, userId, fetchReply } = req.body;
-    // console.log(req.body);
-
-    try {
-      const newSubComment = new SubCommentModel({
-        comment: fetchReply,
-        userId,
-        subComments: [], // Initialize with an empty array for nested sub-comments
-      });
-
-      const result = await newSubComment.save();
-
-      const allComments = await CommentModel.find();
-      const updated = await updateNestedComments(allComments, commentId, result);
-
-      if (updated) {
-        await Promise.all(
-          allComments.map((comment) =>
-            CommentModel.findByIdAndUpdate(comment._id, comment)
-          )
-        );
-      }
-      res.status(200).json({ allComments });
-    } catch (error) {
-      console.error("Failed to update comment:", error);
-      res.status(500).json({ message: "Failed to update comment", error });
     }
   }
 }

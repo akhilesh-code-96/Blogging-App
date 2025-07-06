@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 dotenv.config();
 
+const MONGO_URI = process.env.MONGO_URI;
+
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -39,6 +41,6 @@ app.use(express.json());
 app.use("/api", router);
 
 app.listen(PORT, () => {
-  mongoose.connect(process.env.MONGO_URL);
+  mongoose.connect(MONGO_URI);
   console.log(`running at http://localhost/${PORT}`);
 });
